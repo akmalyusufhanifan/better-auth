@@ -21,7 +21,7 @@ export default function LoginPage() {
     console.log("Login successful:", data);
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleAuth = async () => {
     const { data, error } = await authClient.signIn.social({
       provider: "google",
       callbackURL: "http://localhost:8000/api/auth/callback/google",
@@ -68,7 +68,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@email.com"
+              placeholder="Example@email.com"
               className="text-sm w-full h-10 rounded-lg text-black bg-gray-200 border border-gray-400 px-3 outline-none"
             />
           </div>
@@ -113,7 +113,7 @@ export default function LoginPage() {
         <div className="flex justify-between gap-x-4">
           {/* Google */}
           <button
-            onClick={handleGoogleLogin}
+            onClick={handleGoogleAuth}
             className="bg-gray-200 w-full h-10 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-300 cursor-pointer"
           >
             <Image
