@@ -2,21 +2,31 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/utils/auth-client";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSignup = async () => {
-    const { data, error } = await authClient.signUp.email({
-      name,
-      email,
-      password,
-    });
-
-    console.log(authClient);
+    const { data, error } = await authClient.signUp.email(
+      {
+        name,
+        email,
+        password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/profile");
+        },
+        onError: (ctx) => {
+          console.error(ctx.error);
+        },
+      },
+    );
 
     if (error) {
       console.error("Signup error:", error);

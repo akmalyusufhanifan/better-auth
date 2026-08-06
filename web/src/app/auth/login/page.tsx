@@ -1,15 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/utils/auth-client";
 import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLogin = async () => {
-    const { data, error } = await authClient.signIn.email({ email, password });
+    const { data, error } = await authClient.signIn.email(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.push("/profile");
+        },
+        onError: (ctx) => {
+          console.error(ctx.error);
+        },
+      },
+    );
 
     console.log(authClient);
 
