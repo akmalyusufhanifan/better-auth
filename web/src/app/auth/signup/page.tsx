@@ -1,17 +1,28 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/utils/auth-client";
+import { RiContactsBook3Line } from "react-icons/ri";
+import { CiLogin } from "react-icons/ci";
+import { SlSocialGoogle } from "react-icons/sl";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const handleSignup = async () => {
+    setConfirmPasswordError("");
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
+
     const { data, error } = await authClient.signUp.email(
       {
         name,
@@ -51,116 +62,136 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="bg-slate-100 min-h-screen flex flex-col items-center py-6 px-6">
-      {/* picture */}
-      <div className="relative w-[342] h-[180]">
-        <Image
-          src="/welcome-picture.jpg"
-          alt="Welcome Picture"
-          fill
-          loading="eager"
-          className="object-cover rounded-2xl"
-        />
-      </div>
-
-      {/* sign up form */}
-      <div className="w-full flex flex-col gap-y-6">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 gap-y-6">
+      <div className="bg-[#F8FAFC] w-full shadow-sm border border-gray-200 rounded-sm flex flex-col gap-y-6 px-4 py-6">
         {/* title */}
-        <div className="flex flex-col items-start gap-2 pt-6">
-          <h1 className="text-2xl text-gray-900 font-bold">Welcome👋</h1>
-          <p className="text-sm text-gray-900 font-semibold max-w-xs">
-            Today is a new day. It`s your day. You shape it. Sign up to start
-            managing your projects.
+        <div className="w-full flex flex-col items-center gap-y-2">
+          <RiContactsBook3Line className="text-3xl text-[#0F172A]" />
+          <h1 className="text-xl text-[#0F172A] font-bold">
+            Create an account
+          </h1>
+          <p className="text-xs text-[#0F172A]">
+            Join BetterAuth Kit to secure your apps.
           </p>
         </div>
 
         {/* signup form fields */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {/* name field */}
           <div className="flex flex-col gap-2">
-            <h2 className="text-sm text-gray-900 font-bold">Name</h2>
+            <h2 className="text-xs text-[#0F172A] font-mono">FULL NAME</h2>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              className="text-sm w-full h-10 rounded-lg text-black bg-gray-200 border border-gray-400 px-3 outline-none"
+              className="text-xs w-full h-8 rounded-xs text-[#0F172A] border border-gray-300 px-3 outline-none placeholder:text-gray-600"
             />
           </div>
 
           {/* email field */}
-          <div className="-mt-2 flex flex-col gap-2">
-            <h2 className="text-sm text-gray-900 font-bold">Email</h2>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xs text-[#0F172A] font-mono">EMAIL</h2>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Example@email.com"
-              className="text-sm w-full h-10 rounded-lg text-black bg-gray-200 border border-gray-400 px-3 outline-none"
+              className="text-xs w-full h-8 rounded-xs text-[#0F172A] border border-gray-300 px-3 outline-none placeholder:text-gray-600"
             />
           </div>
 
           {/* password field */}
-          <div className="-mt-2 flex flex-col gap-2">
-            <h2 className="text-sm text-gray-900 font-bold">Password</h2>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xs text-[#0F172A] font-mono">PASSWORD</h2>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="At least 8 characters"
-              className="text-sm w-full h-10 rounded-lg text-black bg-gray-200 border border-gray-400 px-3 outline-none"
+              className="text-xs w-full h-8 rounded-xs text-[#0F172A] border border-gray-300 px-3 outline-none placeholder:text-gray-600"
             />
           </div>
+
+          {/* confirm password field */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xs text-[#0F172A] font-mono">
+              CONFIRM PASSWORD
+            </h2>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setConfirmPasswordError("");
+              }}
+              placeholder="Confirm your password"
+              className={`text-xs w-full h-8 rounded-xs text-[#0F172A] border px-3 outline-none placeholder:text-gray-600 ${
+                confirmPasswordError ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+
+            {confirmPasswordError && (
+              <p className="mt-1 text-sm text-red-500">
+                {confirmPasswordError}
+              </p>
+            )}
+          </div>
+
+          {/* signup button */}
+          <button
+            onClick={handleSignup}
+            className="w-full mt-2 h-8 bg-[#0F172A] rounded-xs text-white text-xs font-mono font-extralight tracking-wide flex items-center justify-center cursor-pointer hover:bg-[#0F172A]/90 transition duration-200"
+          >
+            Sign Up
+          </button>
         </div>
 
-        {/* signup button */}
-        <button
-          onClick={handleSignup}
-          className="w-full h-10 bg-gray-900 rounded-xl text-white tracking-wide flex items-center justify-center cursor-pointer hover:bg-gray-600"
-        >
-          Sign Up
-        </button>
-
-        {/* OAuth */}
         <div className="flex items-center gap-4 pt-2">
-          <div className="w-full border-t border-t-gray-300"></div>
-          <span className="whitespace-nowrap text-sm text-gray-900">
-            Or sign up with
+          <div className="w-full border-t border-gray-300"></div>
+          <span className="whitespace-nowrap text-xs text-[#0F172A] font-mono">
+            OR CONTINUE WITH
           </span>
-          <div className="w-full border-t border-t-gray-300"></div>
+          <div className="w-full border-t border-gray-300"></div>
         </div>
 
-        <div className="flex justify-between gap-x-4">
+        {/* OAuth Options */}
+        <div className="flex flex-col gap-y-4">
+          {/* Github */}
+          <button
+            onClick={handleGoogleAuth} // Replace with actual GitHub auth handler
+            className="w-full h-8 border border-gray-300 rounded-xs flex items-center justify-center gap-2 hover:bg-blue-50 cursor-pointer"
+          >
+            <CiLogin className="text-xl text-[#0F172A]" />
+            <h3 className="text-xs text-[#0F172A] font-mono font-semibold">
+              Github
+            </h3>
+          </button>
+
           {/* Google */}
           <button
             onClick={handleGoogleAuth}
-            className="bg-gray-200 w-full h-10 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-300 cursor-pointer"
+            className="w-full h-8 border border-gray-300 rounded-xs flex items-center justify-center gap-2 hover:bg-blue-50 cursor-pointer"
           >
-            <Image
-              src="/google-logo.png"
-              alt="Google Logo"
-              width={24}
-              height={24}
-            />
-            <h3 className="text-md text-black font-semibold">Google</h3>
+            <SlSocialGoogle className="text-md text-[#0F172A]" />
+            <h3 className="text-xs text-[#0F172A] font-mono font-semibold">
+              Google
+            </h3>
           </button>
+        </div>
 
-          {/* UBAH MENJADI BUTTON BERFUNGSI */}
-          {/* Facebook */}
-          <div className="bg-gray-200 w-full h-10 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-300 cursor-pointer">
-            <Image
-              src="/facebook-logo.png"
-              alt="Facebook Logo"
-              width={24}
-              height={24}
-            />
-            <h3 className="text-md text-black font-semibold">Facebook</h3>
-          </div>
+        <div className="w-full flex justify-center">
+          <p className="text-xs text-[#0F172A]">
+            Already have an account?{" "}
+            <a href="/signin" className="text-[#4F46E5] hover:underline">
+              Sign in
+            </a>
+          </p>
         </div>
       </div>
 
       {/* copyright */}
-      <div className="mt-auto text-sm text-gray-500">
+      <div className="mt-auto text-xs text-[#0F172A]">
         © 2026 All rights reserved.
       </div>
     </div>

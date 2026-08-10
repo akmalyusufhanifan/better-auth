@@ -28,10 +28,10 @@ export default function HomePage() {
         {/* REDESIGN BUTTON */}
         <div className="mt-8 flex flex-col gap-4">
           <Link
-            href="/auth/login"
+            href="/auth/signin"
             className="w-full rounded-lg bg-blue-600 py-3 text-center font-medium text-white transition hover:bg-blue-700"
           >
-            Login
+            Sign In
           </Link>
 
           <Link
