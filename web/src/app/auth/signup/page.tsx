@@ -183,7 +183,7 @@ export default function SignupPage() {
         <div className="w-full flex justify-center">
           <p className="text-xs text-[#0F172A]">
             Already have an account?{" "}
-            <a href="/signin" className="text-[#4F46E5] hover:underline">
+            <a href="/auth/signin" className="text-[#4F46E5] hover:underline">
               Sign in
             </a>
           </p>
